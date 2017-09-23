@@ -1,13 +1,11 @@
-#include "heapP.h"
+#include "mainwindow.h"
+#include <QApplication>
 
-int main(){
-  cola_procesos a;
-  proceso p1("p1", 10);
-  proceso p2("p2", 5);
-  a.add_proceso(p1);
-  a.add_proceso(p2);
+int main(int argc, char *argv[])
+{
+    QApplication a(argc, argv);
+    MainWindow w;
+    w.show();
 
-  proceso p3 = a.get_proceso();
-  cout<< p3.prioridad<<endl;
-
+    return a.exec();
 }
