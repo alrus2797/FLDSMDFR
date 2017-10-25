@@ -38,21 +38,22 @@ public:
 
 
 
-friend class compareProceso;
+friend class comparePrio;
 friend class heap;
 friend class Controlador;
 
 
 };
 
-class compareProceso
+
+class comparePrio
 {
 public:
   bool operator()(proceso*& t1, proceso*& t2) // Returns true if t1 is earlier than t2
   {
-     if (t1->prioridad < t2->prioridad)
-      return true;
-     return false;
+     return (t1)->prioridad < (t2)->prioridad;
+      //return true;
+     //return false;
   }
 };
 

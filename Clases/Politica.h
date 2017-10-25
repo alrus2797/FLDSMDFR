@@ -21,6 +21,7 @@ private:
   Reloj* reloj;
   proceso* proceso_actual = nullptr;
 friend class PoliticaFIFO;
+friend class PoliticaPRIO;
 friend class VentanaPrincipal;
 };
 

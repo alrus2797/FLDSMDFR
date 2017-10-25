@@ -4,6 +4,7 @@
 #include "Ventana.h"
 #include "Politica.h"
 #include "PoliticaFIFO.h"
+#include "PoliticaPRIO.h"
 
 class VentanaPrincipal: public Ventana{
 public:
@@ -23,6 +24,9 @@ private:
   float pos_y = 200;
   vector<string> estados = {"creating", "ready", "running", "blocked", "finished"};
   vector<sf::Color> colores = {sf::Color::Yellow, sf::Color::Green, sf::Color::Blue, sf::Color::Red, sf::Color::Magenta};
+
+  //seleccionar Politica
+  int politica;
 };
 
 
@@ -140,7 +144,7 @@ void VentanaPrincipal::loadWidgets(){
     rend3->setBackgroundColor(sf::Color(210, 210, 210));
     gui->add(proc->l_tiempo);
 
-    politicas.at(0)->add_proceso(proc);
+    politicas.at(politica)->add_proceso(proc);
     procesos.push_back(proc);
 
     auto block = [&](int pos){
@@ -164,8 +168,8 @@ void VentanaPrincipal::loadWidgets(){
 
 void VentanaPrincipal::post_inicio(){
 
-  politicas = {new PoliticaFIFO(reloj)};
-  politicas.at(0)->b_actualizar = true;
+  politicas = {new PoliticaFIFO(reloj), new PoliticaPRIO(reloj)};
+  politicas.at(politica)->b_actualizar = true;
 
 }
 
