@@ -1,16 +1,16 @@
 
 
-#include "Clases/Ventana.h"
+#include "Clases/Ventana_principal.h"
 
 
 
 int main(int argc, char const *argv[]) {
-  //Controlador cont;
-  Ventana wi;
+  
+  VentanaPrincipal wi;
   wi.iniciar();
   wi.loop();
 
-  //cont.iniciar();
+
 
   return 0;
 }
