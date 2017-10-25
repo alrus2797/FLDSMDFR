@@ -16,6 +16,7 @@ public:
   virtual void iniciar();
   virtual void actualizar();
   virtual void dibujar();
+  virtual void loadWidgets(){}
   void loop();
 
 private:
@@ -68,15 +69,14 @@ void Ventana::loop(){
 
 
 void Ventana::iniciar(){
-  window = new RenderWindow(VideoMode(ventana_ancho, ventana_largo),ventana_nombre);
+  window = new RenderWindow(VideoMode(ventana_ancho, ventana_alto),ventana_nombre);
   gui = new Gui(*window);
   reloj = new Reloj();
-  reloj.iniciar();
+  reloj->iniciar();
   try{
       loadWidgets();
   }
   catch (const tgui::Exception& e){
       std::cerr << "Failed to load TGUI widgets: " << e.what() << std::endl;
   }
-
 }
