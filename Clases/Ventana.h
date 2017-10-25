@@ -1,6 +1,7 @@
 /* -*- C++ -*- */
 #include <TGUI/TGUI.hpp>
 #include "Reloj.h"
+#include "Estructura.h"
 
 using namespace sf;
 using namespace std;

@@ -1,6 +1,6 @@
-#include "controlador.h"
 
-#include "Ventana.h"
+
+#include "Clases/Ventana.h"
 
 
 
