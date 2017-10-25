@@ -1,3 +1,6 @@
+#ifndef PROCESO_H
+#define PROCESO_H
+
 /* -*- C++ -*- */
 #include <iostream>
 #include <TGUI/TGUI.hpp>
@@ -24,7 +27,7 @@ public:
     string nombre;
     int prioridad = 0;
     int prioridad_inicial;
-    int estado = 0;
+    int estado = 1;
     float tiempo_servicio;
     float tiempo_actual = 0;
     Label::Ptr l_nombre;
@@ -32,7 +35,7 @@ public:
     Label::Ptr l_tiempo;
     Button::Ptr b_bloquear;
     Button::Ptr b_desbloquear;
-    bool bloqueado = false;
+
 
 
 friend class compareProceso;
@@ -52,3 +55,7 @@ public:
      return false;
   }
 };
+
+
+
+#endif

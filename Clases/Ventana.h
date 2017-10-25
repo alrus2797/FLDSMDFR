@@ -1,7 +1,10 @@
+#ifndef VENTANA_H
+#define VENTANA_H
+
 /* -*- C++ -*- */
 #include <TGUI/TGUI.hpp>
 #include "Reloj.h"
-#include "Estructura.h"
+
 
 using namespace sf;
 using namespace std;
@@ -15,9 +18,10 @@ public:
   ~Ventana(){}
   virtual void cargar_widgets(){}
   virtual void iniciar();
-  virtual void actualizar();
-  virtual void dibujar();
+  virtual void actualizar(){}
+  virtual void dibujar(){}
   virtual void loadWidgets(){}
+  virtual void post_inicio(){}
   void loop();
 
 private:
@@ -34,19 +38,12 @@ private:
   float ventana_alto = 600;
   string ventana_nombre = "WII";
 
-
+friend class VentanaPrincipal;
 };
 
 
-void Ventana::actualizar(){
 
-}
 
-void Ventana::dibujar(){
-  window->clear();
-  gui->draw();
-  window->display();
-}
 
 void Ventana::loop(){
   while (window->isOpen()) {
@@ -63,7 +60,10 @@ void Ventana::loop(){
         gui->handleEvent(*evento);
     }
     actualizar();
+    window->clear();
+    gui->draw();
     dibujar();
+    window->display();
 
   }
 }
@@ -80,4 +80,9 @@ void Ventana::iniciar(){
   catch (const tgui::Exception& e){
       std::cerr << "Failed to load TGUI widgets: " << e.what() << std::endl;
   }
+  post_inicio();
 }
+
+
+
+#endif

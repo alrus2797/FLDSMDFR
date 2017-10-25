@@ -1,4 +1,9 @@
+#ifndef ESTRUCTURA_H
+#define ESTRUCTURA_H
+
+
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
@@ -8,9 +13,9 @@ class Estructura{
 public:
   Estructura(){}
   ~Estructura(){}
-  virtual void push(){}
-  virtual void top(){}
-  virtual T pop(){}
+  virtual void push(T d){}
+  virtual T top(){}
+  virtual void pop(){}
   virtual bool empty(){}
 
 
@@ -18,3 +23,7 @@ public:
 private:
 
 };
+
+
+
+#endif

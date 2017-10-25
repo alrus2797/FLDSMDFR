@@ -1,3 +1,6 @@
+#ifndef RELOJ_H
+#define RELOJ_H
+
 #include <TGUI/TGUI.hpp>
 
 using namespace tgui;
@@ -15,6 +18,8 @@ public:
   Time get_tiempo();
   void detener();
   void continuar();
+  void reiniciar();
+  Time get_delta();
 private:
   Clock* reloj;
   Time delta;
@@ -24,6 +29,14 @@ private:
 
 };
 
+Time Reloj::get_delta(){
+  return delta;
+}
+
+void Reloj::reiniciar(){
+  tiempo = seconds(0);
+  anterior_tiempo = seconds(0);
+}
 
 void Reloj::iniciar(){
   reloj = new Clock();
@@ -58,3 +71,7 @@ void Reloj::actualizar(){
   actualizar_delta();
   tiempo += delta;
 }
+
+
+
+#endif
