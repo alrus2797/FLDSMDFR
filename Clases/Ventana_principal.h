@@ -26,7 +26,9 @@ private:
   vector<sf::Color> colores = {sf::Color::Yellow, sf::Color::Green, sf::Color::Blue, sf::Color::Red, sf::Color::Magenta};
 
   //seleccionar Politica
+  ComboBox::Ptr choose_politica;
   int politica;
+  bool inicio=false;
 };
 
 
@@ -103,10 +105,20 @@ void VentanaPrincipal::loadWidgets(){
   auto rend3 = nomEstado-> getRenderer();
   rend3->setBackgroundColor(sf::Color(180, 180, 180));
 
+  choose_politica = ComboBox::create();
+  choose_politica->setSize(100,30);
+  choose_politica->setPosition(400,100);
+  choose_politica->addItem("FIFO");
+  choose_politica->addItem("Prioridad");
+  choose_politica->setSelectedItemByIndex(0);
+  gui->add(choose_politica);
+  //politica=0;
+
+
   auto createProccess = [&](EditBox::Ptr prioridad, EditBox::Ptr nombreP, EditBox::Ptr tiempoServ) {
 
     string nombreProceso = nombreP->getText().toAnsiString();
-    proceso* proc = new proceso(nombreProceso, tgui::stoi(prioridad->getText().toAnsiString()), tgui::stoi(tiempoServ->getText().toAnsiString()) );
+    proceso* proc = new proceso(nombreProceso, tgui::stoi(tiempoServ->getText().toAnsiString()), tgui::stoi(tiempoServ->getText().toAnsiString()) );
 
     proc->l_nombre = Label::create();
     proc->l_nombre->setSize(150, 30);
@@ -130,7 +142,7 @@ void VentanaPrincipal::loadWidgets(){
 
 
 
-
+    inicio=true;
 
     auto rend1 = proc->l_nombre-> getRenderer();
     rend1->setBackgroundColor(sf::Color(210, 210, 210));
@@ -144,7 +156,7 @@ void VentanaPrincipal::loadWidgets(){
     rend3->setBackgroundColor(sf::Color(210, 210, 210));
     gui->add(proc->l_tiempo);
 
-    politicas.at(politica)->add_proceso(proc);
+    politicas.at(1)->add_proceso(proc);
     procesos.push_back(proc);
 
     auto block = [&](int pos){
@@ -169,14 +181,17 @@ void VentanaPrincipal::loadWidgets(){
 void VentanaPrincipal::post_inicio(){
 
   politicas = {new PoliticaFIFO(reloj), new PoliticaPRIO(reloj)};
-  politicas.at(politica)->b_actualizar = true;
+  politicas.at(1)->b_actualizar = true;
 
 }
 
 
 
 void VentanaPrincipal::actualizar(){
+  cout<<"pol: "<<politica<<endl;
   reloj->actualizar();
+  if(!inicio)
+    politica=choose_politica->getSelectedItemIndex();
 
   actualizar_politicas();
   actualizarLabelsProcesos();

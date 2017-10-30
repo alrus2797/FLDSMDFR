@@ -34,7 +34,7 @@ void PoliticaPRIO::actualizar(){
 
     // si hay un proceso actual
     if(proceso_actual != nullptr){
-      cout<<"as"<<endl;
+      cout<<"se pone prio"<<endl;
       if(proceso_actual->tiempo_actual > proceso_actual->tiempo_servicio)
         sacar_proceso_actual();
       if(proceso_actual->prioridad_inicial > estructura->top()->prioridad_inicial)

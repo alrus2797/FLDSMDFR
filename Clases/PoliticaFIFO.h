@@ -27,13 +27,13 @@ private:
 
 void PoliticaFIFO::actualizar(){
   if(b_actualizar){
-
+    cout<<"proceso: "<<proceso_actual<<endl;
     //actualizar actual proceso
     actualizar_proceso_actual();
 
     // si hay un proceso actual
     if(proceso_actual != nullptr){
-      cout<<"as"<<endl;
+      cout<<"se pone fifo"<<endl;
       if(proceso_actual->tiempo_actual > proceso_actual->tiempo_servicio)
         sacar_proceso_actual();
     }

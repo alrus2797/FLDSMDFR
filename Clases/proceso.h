@@ -51,11 +51,12 @@ class comparePrio
 public:
   bool operator()(proceso*& t1, proceso*& t2) // Returns true if t1 is earlier than t2
   {
-     return (t1)->prioridad < (t2)->prioridad;
+     return (t1)->tiempo_servicio - t1->tiempo_actual > (t2)->tiempo_servicio-t2->tiempo_actual;
       //return true;
      //return false;
   }
 };
+
 
 
 
