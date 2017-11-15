@@ -8,6 +8,7 @@
 #include "PoliticaSPF.h"
 #include "PoliticaRSPF.h"
 #include "PoliticaRoundRobin.h"
+#include "PoliticaRoundRobinPrio.h"
 
 
 class VentanaPrincipal: public Ventana{
@@ -117,6 +118,7 @@ void VentanaPrincipal::loadWidgets(){
   choose_politica->addItem("SPF");
   choose_politica->addItem("RSPF");
   choose_politica->addItem("RoundRobin");
+  choose_politica->addItem("RoundRobinPrio");
   choose_politica->setSelectedItemByIndex(0);
   gui->add(choose_politica);
   //politica=0;
@@ -188,13 +190,14 @@ void VentanaPrincipal::loadWidgets(){
 
 void VentanaPrincipal::post_inicio(){
 
-  politicas = {new PoliticaFIFO(reloj), new PoliticaPRIO(reloj), new PoliticaSPF(reloj), new PoliticaRSPF(reloj), new PoliticaRoundRobin(reloj)};
+  politicas = {new PoliticaFIFO(reloj), new PoliticaPRIO(reloj), new PoliticaSPF(reloj), new PoliticaRSPF(reloj), new PoliticaRoundRobin(reloj), new PoliticaRoundRobinPrio(reloj)};
   // politicas = {new PoliticaFIFO(reloj)};
   politicas.at(0)->b_actualizar = true;
   politicas.at(1)->b_actualizar = true;
   politicas.at(2)->b_actualizar = true;
   politicas.at(3)->b_actualizar = true;
   politicas.at(4)->b_actualizar = true;
+  politicas.at(5)->b_actualizar = true;
 }
 
 

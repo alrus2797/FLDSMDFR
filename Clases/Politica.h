@@ -26,6 +26,7 @@ friend class VentanaPrincipal;
 friend class PoliticaSPF;
 friend class PoliticaRSPF;
 friend class PoliticaRoundRobin;
+friend class PoliticaRoundRobinPrio;
 };
 
 

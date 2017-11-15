@@ -14,10 +14,12 @@ public:
   void pop();
   proceso* top();
   void push_prioridad(proceso*);
+  void push_prioridad_inv(proceso*);
   void push_tiempo_servicio(proceso*);
   void push(proceso*);
   bool empty();
   void show();
+  void incrementar_prioridad(float );
 private:
   list<proceso*> cola;
 };
@@ -67,6 +69,24 @@ void ColaPrioridad::push_prioridad(proceso* d){
 }
 
 
+void ColaPrioridad::push_prioridad_inv(proceso* d){
+  if(cola.size() == 0){
+    cola.push_back(d);
+    return;
+  }
+
+  auto it = cola.begin();
+  while(it != cola.end()){
+    if(d->prioridad < (*it)->prioridad){
+      cola.insert(it, d);
+      return;
+    }
+    it++;
+  }
+  cola.push_back(d);
+
+}
+
 
 void ColaPrioridad::push_tiempo_servicio(proceso* d){
   if(cola.size() == 0){
@@ -89,6 +109,12 @@ void ColaPrioridad::push_tiempo_servicio(proceso* d){
 
 bool ColaPrioridad::empty(){
   return cola.empty();
+}
+
+void ColaPrioridad::incrementar_prioridad(float pr){
+  for(auto& it : cola){
+    it->prioridad += pr;
+  }
 }
 
 #endif

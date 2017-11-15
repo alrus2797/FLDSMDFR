@@ -1,19 +1,19 @@
-#ifndef POLITICAPRIO_H
-#define POLITICAPRIO_H
+#ifndef POLITICAROUNDROBINPRIO_H
+#define POLITICAROUNDROBINPRIO_H
 
 #include "Politica.h"
 #include "ColaPrioridad.h"
 #include "proceso.h"
 #include "Reloj.h"
 
-class PoliticaPRIO:public Politica{
+class PoliticaRoundRobinPrio:public Politica{
 public:
-  PoliticaPRIO(){}
-  PoliticaPRIO(Reloj* r){
+  PoliticaRoundRobinPrio(){}
+  PoliticaRoundRobinPrio(Reloj* r){
     cola = new ColaPrioridad();
     reloj = r;
   }
-  ~PoliticaPRIO(){}
+  ~PoliticaRoundRobinPrio(){}
   void actualizar();
   void actualizar_proceso_actual();
   void sacar_proceso_actual();
@@ -22,15 +22,16 @@ public:
 
 private:
   ColaPrioridad* cola;
+  Time quantum = seconds(2);
+  Time t_ciclo = seconds(0);
 
 };
 
 
 
 
-void PoliticaPRIO::actualizar(){
+void PoliticaRoundRobinPrio::actualizar(){
   if(b_actualizar){
-
     //actualizar actual proceso
     actualizar_proceso_actual();
 
@@ -39,9 +40,12 @@ void PoliticaPRIO::actualizar(){
 
       if(proceso_actual->tiempo_actual > proceso_actual->tiempo_servicio)
         sacar_proceso_actual();
-      if(!cola->empty()){
+
+      if(t_ciclo >= quantum){
         cambiar_proceso_actual();
+        cola->incrementar_prioridad(1);
       }
+      t_ciclo += reloj->get_delta();
     }
 
 
@@ -59,14 +63,15 @@ void PoliticaPRIO::actualizar(){
   }
 }
 
-void PoliticaPRIO::actualizar_proceso_actual(){
+void PoliticaRoundRobinPrio::actualizar_proceso_actual(){
   if(proceso_actual != nullptr){
     proceso_actual->tiempo_actual += reloj->get_delta().asSeconds();
   }
 }
 
-void PoliticaPRIO::sacar_proceso_actual(){
+void PoliticaRoundRobinPrio::sacar_proceso_actual(){
   // cola no vacia
+  t_ciclo = seconds(0);
   if(!cola->empty()){
     proceso_actual->estado = 4;
     proceso_actual = cola->top();
@@ -79,22 +84,24 @@ void PoliticaPRIO::sacar_proceso_actual(){
 
 }
 
-void PoliticaPRIO::cambiar_proceso_actual()
+void PoliticaRoundRobinPrio::cambiar_proceso_actual()
 {
-  proceso* temp = cola->top();
-  if(temp->prioridad < proceso_actual->prioridad){
+  if(!cola->empty()){
+
+    proceso* temp = cola->top();
     cola->pop();
     proceso_actual->estado = 1;
-    cola->push_prioridad_inv(proceso_actual);
+    proceso_actual->prioridad = proceso_actual->prioridad_inicial;
+    cola->push_prioridad(proceso_actual);
     proceso_actual = temp;
     proceso_actual->estado = 2;
   }
-
+  t_ciclo = seconds(0);
 }
 
 
-void PoliticaPRIO::add_proceso(proceso* p){
-  cola->push_prioridad_inv(p);
+void PoliticaRoundRobinPrio::add_proceso(proceso* p){
+  cola->push_prioridad(p);
   procesos.push_back(p);
 }
 
