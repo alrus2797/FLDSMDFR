@@ -4,20 +4,22 @@
 #include "Politica.h"
 #include "ColaFIFO.h"
 #include "proceso.h"
+#include "Reloj.h"
 
 class PoliticaFIFO:public Politica{
 public:
   PoliticaFIFO(){}
   PoliticaFIFO(Reloj* r){
-    estructura = new ColaFIFO<proceso*>();
+    estructura = new ColaFIFO();
     reloj = r;
   }
   ~PoliticaFIFO(){}
   void actualizar();
   void actualizar_proceso_actual();
   void sacar_proceso_actual();
-
+  void add_proceso(proceso* p);
 private:
+  ColaFIFO* estructura;
 
 
 };
@@ -27,13 +29,13 @@ private:
 
 void PoliticaFIFO::actualizar(){
   if(b_actualizar){
-    cout<<"proceso: "<<proceso_actual<<endl;
+
     //actualizar actual proceso
     actualizar_proceso_actual();
 
     // si hay un proceso actual
     if(proceso_actual != nullptr){
-      cout<<"se pone fifo"<<endl;
+
       if(proceso_actual->tiempo_actual > proceso_actual->tiempo_servicio)
         sacar_proceso_actual();
     }
@@ -67,9 +69,16 @@ void PoliticaFIFO::sacar_proceso_actual(){
     estructura->pop();
     return;
   }
+  proceso_actual->estado = 4;
   proceso_actual = nullptr;
 
 
+}
+
+
+void PoliticaFIFO::add_proceso(proceso* p){
+  estructura->push(p);
+  procesos.push_back(p);
 }
 
 #endif

@@ -5,6 +5,10 @@
 #include "Politica.h"
 #include "PoliticaFIFO.h"
 #include "PoliticaPRIO.h"
+#include "PoliticaSPF.h"
+#include "PoliticaRSPF.h"
+#include "PoliticaRoundRobin.h"
+
 
 class VentanaPrincipal: public Ventana{
 public:
@@ -28,7 +32,7 @@ private:
   //seleccionar Politica
   ComboBox::Ptr choose_politica;
   int politica;
-  bool inicio=false;
+
 };
 
 
@@ -110,6 +114,9 @@ void VentanaPrincipal::loadWidgets(){
   choose_politica->setPosition(400,100);
   choose_politica->addItem("FIFO");
   choose_politica->addItem("Prioridad");
+  choose_politica->addItem("SPF");
+  choose_politica->addItem("RSPF");
+  choose_politica->addItem("RoundRobin");
   choose_politica->setSelectedItemByIndex(0);
   gui->add(choose_politica);
   //politica=0;
@@ -118,7 +125,7 @@ void VentanaPrincipal::loadWidgets(){
   auto createProccess = [&](EditBox::Ptr prioridad, EditBox::Ptr nombreP, EditBox::Ptr tiempoServ) {
 
     string nombreProceso = nombreP->getText().toAnsiString();
-    proceso* proc = new proceso(nombreProceso, tgui::stoi(tiempoServ->getText().toAnsiString()), tgui::stoi(tiempoServ->getText().toAnsiString()) );
+    proceso* proc = new proceso(nombreProceso, tgui::stoi(prioridad->getText().toAnsiString()), tgui::stoi(tiempoServ->getText().toAnsiString()) );
 
     proc->l_nombre = Label::create();
     proc->l_nombre->setSize(150, 30);
@@ -142,7 +149,7 @@ void VentanaPrincipal::loadWidgets(){
 
 
 
-    inicio=true;
+
 
     auto rend1 = proc->l_nombre-> getRenderer();
     rend1->setBackgroundColor(sf::Color(210, 210, 210));
@@ -156,7 +163,8 @@ void VentanaPrincipal::loadWidgets(){
     rend3->setBackgroundColor(sf::Color(210, 210, 210));
     gui->add(proc->l_tiempo);
 
-    politicas.at(1)->add_proceso(proc);
+    cout<<politica<<endl;
+    politicas.at(politica)->add_proceso(proc);
     procesos.push_back(proc);
 
     auto block = [&](int pos){
@@ -180,18 +188,22 @@ void VentanaPrincipal::loadWidgets(){
 
 void VentanaPrincipal::post_inicio(){
 
-  politicas = {new PoliticaFIFO(reloj), new PoliticaPRIO(reloj)};
+  politicas = {new PoliticaFIFO(reloj), new PoliticaPRIO(reloj), new PoliticaSPF(reloj), new PoliticaRSPF(reloj), new PoliticaRoundRobin(reloj)};
+  // politicas = {new PoliticaFIFO(reloj)};
+  politicas.at(0)->b_actualizar = true;
   politicas.at(1)->b_actualizar = true;
-
+  politicas.at(2)->b_actualizar = true;
+  politicas.at(3)->b_actualizar = true;
+  politicas.at(4)->b_actualizar = true;
 }
 
 
 
 void VentanaPrincipal::actualizar(){
-  cout<<"pol: "<<politica<<endl;
+  //cout<<"pol: "<<politica<<endl;
   reloj->actualizar();
-  if(!inicio)
-    politica=choose_politica->getSelectedItemIndex();
+
+  politica=choose_politica->getSelectedItemIndex();
 
   actualizar_politicas();
   actualizarLabelsProcesos();

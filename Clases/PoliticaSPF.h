@@ -1,23 +1,23 @@
-#ifndef POLITICAPRIO_H
-#define POLITICAPRIO_H
+#ifndef POLITICASPF_H
+#define POLITICASPF_H
 
 #include "Politica.h"
 #include "ColaPrioridad.h"
 #include "proceso.h"
 #include "Reloj.h"
 
-class PoliticaPRIO:public Politica{
+class PoliticaSPF:public Politica{
 public:
-  PoliticaPRIO(){}
-  PoliticaPRIO(Reloj* r){
+  PoliticaSPF(){}
+  PoliticaSPF(Reloj* r){
     cola = new ColaPrioridad();
     reloj = r;
   }
-  ~PoliticaPRIO(){}
+  ~PoliticaSPF(){}
   void actualizar();
   void actualizar_proceso_actual();
   void sacar_proceso_actual();
-  void cambiar_proceso_actual();
+
   void add_proceso(proceso* p);
 
 private:
@@ -28,7 +28,7 @@ private:
 
 
 
-void PoliticaPRIO::actualizar(){
+void PoliticaSPF::actualizar(){
   if(b_actualizar){
 
     //actualizar actual proceso
@@ -39,9 +39,6 @@ void PoliticaPRIO::actualizar(){
 
       if(proceso_actual->tiempo_actual > proceso_actual->tiempo_servicio)
         sacar_proceso_actual();
-      if(!cola->empty()){
-        cambiar_proceso_actual();
-      }
     }
 
 
@@ -59,13 +56,13 @@ void PoliticaPRIO::actualizar(){
   }
 }
 
-void PoliticaPRIO::actualizar_proceso_actual(){
+void PoliticaSPF::actualizar_proceso_actual(){
   if(proceso_actual != nullptr){
     proceso_actual->tiempo_actual += reloj->get_delta().asSeconds();
   }
 }
 
-void PoliticaPRIO::sacar_proceso_actual(){
+void PoliticaSPF::sacar_proceso_actual(){
   // cola no vacia
   if(!cola->empty()){
     proceso_actual->estado = 4;
@@ -79,22 +76,9 @@ void PoliticaPRIO::sacar_proceso_actual(){
 
 }
 
-void PoliticaPRIO::cambiar_proceso_actual()
-{
-  proceso* temp = cola->top();
-  if(temp->prioridad > proceso_actual->prioridad){
-    cola->pop();
-    proceso_actual->estado = 1;
-    cola->push_prioridad(proceso_actual);
-    proceso_actual = temp;
-    proceso_actual->estado = 2;
-  }
 
-}
-
-
-void PoliticaPRIO::add_proceso(proceso* p){
-  cola->push_prioridad(p);
+void PoliticaSPF::add_proceso(proceso* p){
+  cola->push_tiempo_servicio(p);
   procesos.push_back(p);
 }
 
